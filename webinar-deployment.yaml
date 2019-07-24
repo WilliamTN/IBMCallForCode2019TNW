@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webinar
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: webinar
+    spec:
+      containers:
+      - name: webinar-container
+        # Should match the name of your Docker image in your repository
+        image: registry.ng.bluemix.net/mailbag/webinar:v1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: CLOUDANT_URL
+          valueFrom:
+            secretKeyRef:
+              # Should match the name of your Kubernetes secret
+              name: webinar-secret
+              key: CLOUDANT_URL
